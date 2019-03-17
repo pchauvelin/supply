@@ -33,6 +33,7 @@ docker-compose build
 docker-compose up
 docker-compose exec php bash
 cd /var/www/supply
+composer update
 php bin/console make:migration
 php bin/console doctrine:migrations:migrate
 php bin/console assets:install
@@ -44,3 +45,9 @@ mkdir -p public/uploads/sales
 # Accès 
 - http://supply.local/admin
 - Le dashboard permet d'accéder à toutes les pages de l'application
+
+# Choix techniques
+- Symfony 4.2
+- Mysql / Doctrine
+- Sonata admin
+- Docker / docker-compose
