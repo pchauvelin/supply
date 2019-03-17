@@ -41,9 +41,6 @@ mkdir -p public/uploads/sales
 
 -	Un sample de data (data.sql) est disponible dans le dossier "sample" du projet
 -	Penser à ajouter dans votre vhost l'ip du container associé au domaine supply.local
-# Screens 
-- Accès : http://supply.local/admin
-
-![Dashboard](https://imgur.com/JrPf0yL)
-![Produits / stocks](https://imgur.com/u0s6bjJ)
-![Commandes clients](https://imgur.com/lorIfdq)
+# Accès 
+- http://supply.local/admin
+- Le dashboard permet d'accéder à toutes les pages de l'application
