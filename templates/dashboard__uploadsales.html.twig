@@ -1,0 +1,20 @@
+<form action="{{ path('admin_app_sale_uploadSales') }}" id="upload-form" method="post" enctype="multipart/form-data">
+    <input id="upload" name="file" type="file" style="display: none"/>
+</form>
+<a class="btn btn-link btn-flat" href="" id="upload_link">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    Upload sales
+</a>
+
+<script>
+    $(function(){
+        $("#upload_link").on('click', function(e){
+            e.preventDefault();
+            $("#upload:hidden").trigger('click');
+        });
+    });
+
+    $('#upload').change(function(){
+        $("#upload-form").submit();
+    });
+</script>

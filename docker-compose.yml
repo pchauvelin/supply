@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+    db:
+        image: mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PWD}
+            MYSQL_DATABASE: ${DATABASE_NAME}
+            MYSQL_USER: ${DATABASE_USER}
+            MYSQL_PASSWORD: ${DATABASE_PWD}
+        ports:
+            - 3306:3306
+    php:
+        build:
+            context: docker/php7-fpm
+            args:
+                TIMEZONE: ${TIMEZONE}
+        volumes:
+            - ${SYMFONY_PATH_SUPPLY}:/var/www/supply
+    nginx:
+        build: docker/nginx
+        ports:
+            - 80:80
+        volumes_from:
+            - php
+        volumes:
+            - ./docker/nginx/vhosts/:/etc/nginx/sites-enabled

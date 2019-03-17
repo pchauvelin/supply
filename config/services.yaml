@@ -1,0 +1,77 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: 'en'
+    sales_directory: '%kernel.project_dir%/public/uploads/sales'
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    App\Service\InventoryService:
+        public: true
+        arguments: ['@doctrine.orm.entity_manager']
+
+    App\Service\FileService:
+        arguments:
+            $targetDirectory: '%sales_directory%'
+
+    App\Service\SaleService:
+        public: true
+        arguments: ['@doctrine.orm.entity_manager']
+
+    admin.product:
+        class: App\Admin\ProductAdmin
+        arguments: [~, App\Entity\Product, App\Controller\ProductAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Products }
+
+    admin.supplier:
+        class: App\Admin\SupplierAdmin
+        arguments: [~, App\Entity\Supplier, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Suppliers }
+
+    admin.sale:
+        class: App\Admin\SaleAdmin
+        arguments: [~, App\Entity\Sale, App\Controller\SaleAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Sales }
+
+    admin.saleitem:
+        class: App\Admin\SaleItemAdmin
+        arguments: [~, App\Entity\SaleItem, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: SalesItem, show_in_dashboard: false }
+
+    admin.purchase:
+        class: App\Admin\PurchaseAdmin
+        arguments: [~, App\Entity\Purchase, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Purchases }
+
+    admin.purchaseitem:
+        class: App\Admin\PurchaseItemAdmin
+        arguments: [~, App\Entity\PurchaseItem, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: PurchaseItem, show_in_dashboard: false }
